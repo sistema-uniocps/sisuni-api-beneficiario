@@ -1,0 +1,18 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="api_app_beneficiario_cps.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="id_ambiente" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">1</Value>
+    </Setting>
+    <Setting Name="numdigitosSenha" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">8</Value>
+    </Setting>
+    <Setting Name="caracteresSenha" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">abcdefghijklmnopqrstuvxz</Value>
+    </Setting>
+    <Setting Name="cnx_sql" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Data Source=srvuniocps;Initial Catalog=datasys;Integrated Security=False;User ID=usrUniCps ;password=S1st3ma@UniCPS</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

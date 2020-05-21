@@ -1,0 +1,4 @@
+api_app_beneficiario_planos_get
+api_app_beneficiario_titular_dados_get
+api_app_beneficiario_contrato_plano_get
+api_app_beneficiario_dependente_dados_get
