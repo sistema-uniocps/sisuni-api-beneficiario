@@ -79,5 +79,22 @@ namespace api_app_beneficiario_cps.Models
 		public int id_grau_dependencia { get; set; }
 	}
 
+	public class cancelamento_movfinanceiro
+	{
+		public string id_tipo_movimento { get; set; }
+		public string pd_tipo_movimento { get; set; }
+		public string id_pessoa {get;set;}
+		public string IDLAN { get; set; }
+		public string DATAEMISSAO { get; set; }
+		public string DATAVENCIMENTO { get; set; }
+		public string NUMERODOCUMENTO { get; set; }
+		public string VALORORIGINAL { get; set; }
+		public string VALORMULTA { get; set; }
+		public string VALORMORA { get; set; }
+		public string VALORMULTAMORA { get; set; }
+		public string VALORTOTAL { get; set; }
+		public string DATAVENCTO { get; set; }
+		public string CODCFO { get; set; }
+	}
 
 }

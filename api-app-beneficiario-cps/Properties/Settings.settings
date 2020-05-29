@@ -12,7 +12,10 @@
       <Value Profile="(Default)">abcdefghijklmnopqrstuvxz</Value>
     </Setting>
     <Setting Name="cnx_sql" Type="System.String" Scope="Application">
-      <Value Profile="(Default)">Data Source=srvuniocps;Initial Catalog=datasys;Integrated Security=False;User ID=usrUniCps ;password=S1st3ma@UniCPS</Value>
+      <Value Profile="(Default)">Data Source=pihomol;Initial Catalog=datasys;Integrated Security=False;User ID=sistema-uniodonto ;password=123@mudar</Value>
+    </Setting>
+    <Setting Name="cnxOracle" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">Provider=Provider=OraOLEDB.Oracle;PORT=1521;Data Source=corporerm;User ID=rm;Password=rm; providerName=""</Value>
     </Setting>
   </Settings>
 </SettingsFile>

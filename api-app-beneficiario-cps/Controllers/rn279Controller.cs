@@ -6,6 +6,7 @@ using LogUtil;
 using Microsoft.Owin.Security.OAuth;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
@@ -256,5 +257,88 @@ namespace api_app_beneficiario_cps.Controllers
 			}
 			return retorno;
 		}
+
+		[HttpGet]
+		public Retorno<cancelamento_movfinanceiro> listaMovimentoFinanceiro( int id_pessoa, int id_tipo_movimento)
+		{
+			/*
+			 * 1- Vencimentos em aberto
+			 * 2- Lançamentos Mês
+			 * 3- Lançamentos Futuros
+			 */
+			List<cancelamento_movfinanceiro> lista = new List<cancelamento_movfinanceiro>();
+			string strSql = string.Empty;
+			strSql += "SELECT";
+			strSql += " IDLAN,";
+			strSql += " DATAEMISSAO,";
+			strSql += " DATAVENCIMENTO,";
+			strSql += " NUMERODOCUMENTO,";
+			strSql += " VALORORIGINAL ,";
+			strSql += " VALORMULTA,";
+			strSql += " VALORMORA,";
+			strSql += " VALORMULTAMORA,";
+			strSql += " VALORTOTAL,";
+			strSql += " DATAVENCTO,";
+			strSql += " CODCFO";
+			strSql += " FROM ";
+
+			string pd_tipo_movimento = string.Empty;
+			switch (id_tipo_movimento)
+            {
+				case 1:
+					strSql += " VLANCTOVENCTOABERTO";
+					pd_tipo_movimento = "VLANCTOVENCTOABERTO";
+					break;
+				case 2:
+					strSql += " VLANCTOVENCTOMES";
+					pd_tipo_movimento = "VLANCTOVENCTOMES";
+					break;
+				case 3:
+					strSql += " VLANCTOVENCTOFUTURO";
+					pd_tipo_movimento = "VLANCTOVENCTOFUTURO";
+					break;
+            }
+			strSql += " WHERE ";
+
+			string formatCod = ("000000000" + id_pessoa.ToString());
+			formatCod = "'5" + formatCod.Substring(formatCod.Length - 9, 9) + "'";
+			strSql += " CODCFO = " + formatCod;
+			strSql += " ORDER BY DATAVENCTO ASC ";
+
+			sqlOracle cnxOra = new sqlOracle();
+			DataTable dt = cnxOra.mRetornaDataTable(strSql);
+
+            foreach (DataRow dr in dt.Rows)
+            {
+				cancelamento_movfinanceiro item = new cancelamento_movfinanceiro();
+				item.id_pessoa = id_pessoa.ToString();
+				item.id_tipo_movimento = id_tipo_movimento.ToString();
+				item.pd_tipo_movimento = pd_tipo_movimento;
+
+				item.IDLAN = dr["IDLAN"].ToString();
+				item.DATAEMISSAO = dr["DATAEMISSAO"].ToString();
+				item.DATAVENCIMENTO = dr["DATAVENCIMENTO"].ToString();
+				item.NUMERODOCUMENTO = dr["NUMERODOCUMENTO"].ToString();
+				item.VALORORIGINAL = dr["VALORORIGINAL"].ToString();
+				item.VALORMULTA = dr["VALORMULTA"].ToString();
+				item.VALORMORA = dr["VALORMORA"].ToString();
+				item.VALORMULTAMORA = dr["VALORMULTAMORA"].ToString();
+				item.VALORTOTAL = dr["VALORTOTAL"].ToString();
+				item.DATAVENCTO = dr["DATAVENCTO"].ToString();
+				item.CODCFO = dr["CODCFO"].ToString();
+
+				lista.Add(item);
+			}
+            Retorno<cancelamento_movfinanceiro> retorno;
+			retorno = new Retorno<cancelamento_movfinanceiro>(
+									lista.Count > 0 ? HttpStatusCode.OK : HttpStatusCode.NotFound,
+									lista.Count > 0 ? string.Empty : Mensagem.NenhumItem,
+									lista
+								);
+
+			return retorno;
+		}
+
 	}
+
 }
