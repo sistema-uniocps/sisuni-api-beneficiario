@@ -1,34 +1,27 @@
 ﻿using api_app_beneficiario_cps.App_Code.Utils;
 using api_app_beneficiario_cps.Models;
-using Dapper;
+using System;
+
+using System.Web.Http;
 using log4net;
 using LogUtil;
-using Microsoft.Owin.Security.OAuth;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
-using System.Security.Claims;
-using System.Web.Http;
-using System.Web.Mvc;
-using HttpGetAttribute = System.Web.Http.HttpGetAttribute;
-using HttpPutAttribute = System.Web.Mvc.HttpPutAttribute;
+using Dapper;
+using System.Data.SqlClient;
+using System.Collections.Generic;
+using System.Data;
 
 namespace api_app_beneficiario_cps.Controllers
 {
-
-	public class rn279Controller : BaseApiController
+	[Authorize]
+	public class rn279Controller : ApiController, IDisposable
 	{
 		private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 		LogUtil.LogConfiguracao cfg = new LogConfiguracao(log, System.Web.Hosting.HostingEnvironment.MapPath("~") + AppSetting.DiretorioLog);
-		[AutorizeGeral]
 		[HttpGet]
 		public Retorno<dropdown> listaPlanosAtivosTitularGet(int id_pessoa)
 		{
-			this._cnx = api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql;
-
 			Retorno<dropdown> retorno;
 			var _stp = "api_app_beneficiario_planos_get";
 			var p = new DynamicParameters();
@@ -37,7 +30,7 @@ namespace api_app_beneficiario_cps.Controllers
 
 			try
 			{
-				using (var sqlcon = new SqlConnection(this._cnx))
+				using (var sqlcon = new SqlConnection(api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql))
 				{
 					lista = sqlcon.Query<dropdown>(_stp, p, commandType: System.Data.CommandType.StoredProcedure).ToList();
 				}
@@ -116,7 +109,7 @@ namespace api_app_beneficiario_cps.Controllers
 			catch (SqlException sql)
 			{
 
-				log.Error("Erro no banco:->" + sql.Message + "\r\nConsulta->" + _stp + "\r\n(\r\n" + Util.RetornaDapperParametrosString(p) + ")" + "\r\n");
+				log.Error("Erro no banco:->" + sql.Message + "\r\nConsulta->" + "api_app_beneficiario_rn279_titular_dados_get" + "\r\n(\r\n" + Util.RetornaDapperParametrosString(p) + ")" + "\r\n");
 
 				retorno = new Retorno<beneficiario_titular>(
 												  HttpStatusCode.InternalServerError,
@@ -126,7 +119,7 @@ namespace api_app_beneficiario_cps.Controllers
 			}
 			catch (Exception ex)
 			{
-				log.Error("Erro no código:->" + ex.Message + "\r\nConsulta->" + _stp + "\r\n(\r\n" + Util.RetornaDapperParametrosString(p) + ")" + "\r\n");
+				log.Error("Erro no código:->" + ex.Message + "\r\nConsulta->" + "api_app_beneficiario_rn279_titular_dados_get" + "\r\n(\r\n" + Util.RetornaDapperParametrosString(p) + ")" + "\r\n");
 				retorno = new Retorno<beneficiario_titular>(
 												  HttpStatusCode.InternalServerError,
 												  ex.Message,
@@ -138,15 +131,13 @@ namespace api_app_beneficiario_cps.Controllers
 		[HttpGet]
 		public Retorno<dropdown> listaMotivosCancelamentoAnsGet()
 		{
-			this._cnx = api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql;
-
 			Retorno<dropdown> retorno;
 			var _stp = "api_app_beneficiario_rn279_tipo_cancelamento_get";
 			var lista = new List<dropdown>();
 
 			try
 			{
-				using (var sqlcon = new SqlConnection(this._cnx))
+				using (var sqlcon = new SqlConnection(api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql))
 				{
 					lista = sqlcon.Query<dropdown>(_stp, null, commandType: System.Data.CommandType.StoredProcedure).ToList();
 				}
@@ -238,7 +229,7 @@ namespace api_app_beneficiario_cps.Controllers
 			catch (SqlException sql)
 			{
 
-				log.Error("Erro no banco:->" + sql.Message + "\r\nConsulta->" + _stp + "\r\n(\r\n" + ")" + "\r\n");
+				log.Error("Erro no banco:->" + sql.Message + "\r\nConsulta->" + "api_app_beneficiario_rn279_processar_cancelamento" + "\r\n(\r\n" + ")" + "\r\n");
 
 				retorno = new Retorno<String>(
 												  HttpStatusCode.InternalServerError,
@@ -248,7 +239,7 @@ namespace api_app_beneficiario_cps.Controllers
 			}
 			catch (Exception ex)
 			{
-				log.Error("Erro no código:->" + ex.Message + "\r\nConsulta->" + _stp + "\r\n(\r\n" + ")" + "\r\n");
+				log.Error("Erro no código:->" + ex.Message + "\r\nConsulta->" + "api_app_beneficiario_rn279_processar_cancelamento" + "\r\n(\r\n" + ")" + "\r\n");
 				retorno = new Retorno<String>(
 												  HttpStatusCode.InternalServerError,
 												  ex.Message,

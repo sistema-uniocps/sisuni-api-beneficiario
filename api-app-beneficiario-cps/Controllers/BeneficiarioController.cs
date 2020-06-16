@@ -14,32 +14,29 @@ using System.Web.Http;
 
 namespace api_app_beneficiario_cps.Controllers
 {
-	
-	public class BeneficiarioController : BaseApiController
+
+	[Authorize]
+	public class BeneficiarioController : ApiController, IDisposable
 	{
 		private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 		LogUtil.LogConfiguracao cfg = new LogConfiguracao(log, System.Web.Hosting.HostingEnvironment.MapPath("~") + AppSetting.DiretorioLog);
 
-		[AutorizeGeral]
 		[HttpGet]
-		public Retorno<beneficiario> get()
+		public Retorno<beneficiario> get(int id_pessoa)
 		{
 			Retorno<beneficiario> retorno;
+			DynamicParameters p = new DynamicParameters();
 
 			var _stp = "api_app_beneficiario_pessoa_get";
 			var _stp2 = "api_app_beneficiario_pessoa_endereco_get";
 			var _stp3 = "api_app_beneficiario_pessoa_plano_get";
 
-			this._cnx = api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql;
-			
-			DynamicParameters p = new DynamicParameters();
-
 			var lista = new List<beneficiario>();
 			try
 			{
-				p.Add("id_pessoa", this._id);
+				p.Add("id_pessoa", id_pessoa);
 
-				using (var sqlcon = new SqlConnection(this._cnx))
+				using (var sqlcon = new SqlConnection(api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql))
 				{
 					lista = sqlcon.Query<beneficiario>(_stp, p, commandType: System.Data.CommandType.StoredProcedure).ToList();
 
@@ -83,13 +80,10 @@ namespace api_app_beneficiario_cps.Controllers
 		public Retorno<dependentes_ativos> dependentes_ativos(int id_pessoa_titular)
 		{
 			Retorno<dependentes_ativos> retorno;
+			DynamicParameters p = new DynamicParameters();
 
 			var _stp = "api_app_beneficiario_lista_dependentes_ativos";
 			var id_cooperativa = 5;
-
-			this._cnx = api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql;
-
-			DynamicParameters p = new DynamicParameters();
 
 			var lista = new List<dependentes_ativos>();
 			try
@@ -97,7 +91,7 @@ namespace api_app_beneficiario_cps.Controllers
 				p.Add("id_cooperativa", id_cooperativa);
 				p.Add("id_pessoa_titular", id_pessoa_titular);
 
-				using (var sqlcon = new SqlConnection(this._cnx))
+				using (var sqlcon = new SqlConnection(api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql))
 				{
 					lista = sqlcon.Query<dependentes_ativos>(_stp, p, commandType: System.Data.CommandType.StoredProcedure).ToList();
 				}
@@ -132,10 +126,8 @@ namespace api_app_beneficiario_cps.Controllers
 		}
 
 		[HttpGet]
-		public Retorno<utilizacao> utilizacao()
+		public Retorno<utilizacao> utilizacao(int id_pessoa)
 		{
-			this._cnx = api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql;
-
 			Retorno<utilizacao> retorno;
 			var _stp = "api_app_beneficiario_utilizacao_plano_get";
 			var p = new DynamicParameters();
@@ -143,9 +135,9 @@ namespace api_app_beneficiario_cps.Controllers
 
 			try
 			{
-				p.Add("id_pessoa", this._id);
+				p.Add("id_pessoa", id_pessoa);
 
-				using (var sqlcon = new SqlConnection(this._cnx))
+				using (var sqlcon = new SqlConnection(api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql))
 				{
 					lista = sqlcon.Query<utilizacao>(_stp, p, commandType: System.Data.CommandType.StoredProcedure).ToList();
 				}
@@ -178,5 +170,53 @@ namespace api_app_beneficiario_cps.Controllers
 			}
 			return retorno;
 		}
+
+		[HttpGet]
+		public Retorno<carteirinha> carteirinha(int id_pessoa)
+		{
+			Retorno<carteirinha> retorno;
+			var _stp = "api_app_beneficiario_carteirinha_get";
+			var p = new DynamicParameters();
+			var lista = new List<carteirinha>();
+
+			try
+			{
+				p.Add("id_pessoa", id_pessoa);
+				using (var sqlcon = new SqlConnection(api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql))
+				{
+					lista = sqlcon.Query<carteirinha>(_stp, p, commandType: System.Data.CommandType.StoredProcedure).ToList();
+				}
+
+				retorno = new Retorno<carteirinha>(
+													lista.Count > 0 ? HttpStatusCode.OK : HttpStatusCode.NotFound,
+													lista.Count > 0 ? string.Empty : Mensagem.NenhumItem,
+													lista
+												);
+			}
+			catch (SqlException sql)
+			{
+
+				log.Error("Erro no banco:->" + sql.Message + "\r\nConsulta->" + _stp + "\r\n(\r\n" + Util.RetornaDapperParametrosString(p) + ")" + "\r\n");
+
+				retorno = new Retorno<carteirinha>(
+												  HttpStatusCode.InternalServerError,
+												  sql.Message,
+												  lista
+								  );
+			}
+			catch (Exception ex)
+			{
+				log.Error("Erro no código:->" + ex.Message + "\r\nConsulta->" + _stp + "\r\n(\r\n" + Util.RetornaDapperParametrosString(p) + ")" + "\r\n");
+				retorno = new Retorno<carteirinha>(
+												  HttpStatusCode.InternalServerError,
+												  ex.Message,
+												  lista
+								  );
+			}
+			return retorno;
+		}
+
+
+
 	}
 }

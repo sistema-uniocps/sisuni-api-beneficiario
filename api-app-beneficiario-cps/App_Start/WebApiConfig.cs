@@ -10,31 +10,56 @@ using System.Web.Http.Cors;
 
 namespace api_app_beneficiario_cps
 {
-	public static class WebApiConfig
-	{
-		public static void Register(HttpConfiguration config)
-		{
-			// Web API configuration and services
-			var formatters = config.Formatters;
-			formatters.Remove(formatters.XmlFormatter);
+    public static class WebApiConfig
+    {
+        public static void Register(HttpConfiguration config)
+        {
+            // --------------------------------------- DEAFULT --------------------------------
+            //// Web API routes
+            //config.MapHttpAttributeRoutes();
 
-			var jsonSettings = formatters.JsonFormatter.SerializerSettings;
-			jsonSettings.Formatting = Formatting.None;
-			jsonSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-			jsonSettings.NullValueHandling = NullValueHandling.Ignore;
-			jsonSettings.Culture = CultureInfo.GetCultureInfo("pt-br");
+            //config.Routes.MapHttpRoute(
+            //    name: "DefaultApi",
+            //    routeTemplate: "api/{controller}/{id}",
+            //    defaults: new { id = RouteParameter.Optional }
+            //);
+            // Web API configuration and services
 
-			// Web API routes
-			config.MapHttpAttributeRoutes();
+            //-------------------------------------- CUSTOM 1 ---------------------------------
+            //var cors = new EnableCorsAttribute("*", "*", "GET, POST, PUT, DELETE, OPTIONS");
+            //config.EnableCors(cors);
 
-			config.Filters.Add(new DeflateCompressionAttribute());
-			//config.MessageHandlers.Add(new Controllers.AutorizeGeralAttribute());
+            var formatters = config.Formatters;
+            formatters.Remove(formatters.XmlFormatter);
 
-			config.Routes.MapHttpRoute(
-				name: "DefaultApi",
-				routeTemplate: "api/{controller}/{action}/{id}",
-				defaults: new { id = RouteParameter.Optional }
-			);
-		}
-	}
+            var jsonSettings = formatters.JsonFormatter.SerializerSettings;
+            jsonSettings.Formatting = Formatting.None;
+            jsonSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            jsonSettings.NullValueHandling = NullValueHandling.Ignore;
+            // jsonSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
+            jsonSettings.Culture = CultureInfo.GetCultureInfo("pt-br");
+
+            // Web API routes
+            config.MapHttpAttributeRoutes();
+
+            config.Filters.Add(new DeflateCompressionAttribute());
+            config.MessageHandlers.Add(new Controllers.AutorizeController());
+
+            config.Routes.MapHttpRoute(
+                         name: "DefaultApi",
+                         routeTemplate: "api/{controller}/{action}/{id}",
+                         defaults: new { id = RouteParameter.Optional }
+                     );
+
+            //---------------------------------- CUSTOM 2 -------------------------------
+            //var cors = new EnableCorsAttribute("*", "*", "GET, POST, PUT, DELETE, OPTIONS");
+            //config.EnableCors(cors);
+
+            //config.Routes.MapHttpRoute(
+            //    name: "DefaultApi",
+            //    routeTemplate: "api/{controller}/{action}/{id}",
+            //    defaults: new { id = RouteParameter.Optional }
+            //);		}
+        }
+    }
 }

@@ -205,7 +205,8 @@
     <Compile Include="App_Code\Utils\Util.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\DeflateCompressionAttribute.cs" />
-    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
@@ -237,10 +238,7 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Controllers\AutorizeController.cs" />
-    <Compile Include="Controllers\AutorizeGeralController.cs" />
-    <Compile Include="Controllers\BaseApiController.cs" />
     <Compile Include="Controllers\CooperadoController.cs" />
-    <Compile Include="Controllers\loginController.cs" />
     <Compile Include="Controllers\gtoController.cs" />
     <Compile Include="Controllers\BeneficiarioController.cs" />
     <Compile Include="Controllers\rn279Controller.cs" />
@@ -269,8 +267,6 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
-    <Compile Include="Provider\OAuthAppProvider.cs" />
-    <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Areas\HelpPage\HelpPage.css" />

@@ -12,7 +12,8 @@ using System.Web.Http;
 
 namespace api_app_beneficiario_cps.Controllers
 {
-    public class GtoController : BaseApiController
+    [Authorize]
+    public class GtoController : ApiController, IDisposable
     {
         private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
         LogUtil.LogConfiguracao cfg = new LogConfiguracao(log, System.Web.Hosting.HostingEnvironment.MapPath("~") + AppSetting.DiretorioLog);
@@ -20,8 +21,6 @@ namespace api_app_beneficiario_cps.Controllers
         [HttpGet]
         public Retorno<gto> get(int id_gto)
         {
-			this._cnx = api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql;
-
             Retorno<gto> retorno;
             var _stp = "api_app_beneficiario_gto_get";
             var p = new DynamicParameters();
@@ -31,7 +30,7 @@ namespace api_app_beneficiario_cps.Controllers
             {
                 p.Add("id_gto", id_gto);
 
-                using (var sqlcon = new SqlConnection(this._cnx))
+                using (var sqlcon = new SqlConnection(api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql))
                 {
                     lista = sqlcon.Query<gto>(_stp, p, commandType: System.Data.CommandType.StoredProcedure).ToList();
                 }

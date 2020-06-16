@@ -14,7 +14,9 @@ using System.Web.Http;
 
 namespace api_app_beneficiario_cps.Controllers
 {
-	public class CooperadoController : BaseApiController
+
+	[Authorize]
+	public class CooperadoController : ApiController, IDisposable
 	{
 		private static readonly ILog log = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 		LogUtil.LogConfiguracao cfg = new LogConfiguracao(log, System.Web.Hosting.HostingEnvironment.MapPath("~") + AppSetting.DiretorioLog);

@@ -149,6 +149,71 @@ namespace api_app_beneficiario_cps.Controllers
 			return result;
 		}
 
+		[HttpPost]
+		public Retorno<dados_simples> alterar_senha(alterar_senha model)
+		{
+			this._cnx = api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql;
+
+			Retorno<dados_simples> result;
+			var _stp = "api_usuario_email_get";
+			var _stp2 = "api_usuario_password_set";
+			int password_set = 0;
+
+			var p = new DynamicParameters();
+
+			var lista = new List<dados_simples>();
+
+			try
+			{
+				p.Add("pUserName", model.login);
+				p.Add("email", model.email);
+
+				using (var sqlcon = new SqlConnection(this._cnx))
+				{
+					var user = sqlcon.Query<user>(_stp, p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
+					if (user.id > 0)
+					{
+						var p2 = new DynamicParameters();
+						p2.Add("id_user", user.id);
+						p2.Add("pPassword", model.nova_senha);
+
+						password_set = sqlcon.Query<int>(_stp2, p2, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
+
+						if (password_set > 0)
+						{
+							sendEmail(model.email, "Alteração de senha", "Alteração de senha realizada com sucesso.");
+						}
+					}
+				}
+
+				result = new Retorno<dados_simples>(
+													password_set > 0 ? HttpStatusCode.OK : HttpStatusCode.NotFound,
+													password_set > 0 ? string.Empty : Mensagem.NenhumItem,
+													lista
+												);
+			}
+			catch (SqlException sql)
+			{
+
+				log.Error("Erro no banco:->" + sql.Message + "\r\nConsulta->" + _stp + "\r\n(\r\n" + Util.RetornaDapperParametrosString(p) + ")" + "\r\n");
+
+				result = new Retorno<dados_simples>(
+												  HttpStatusCode.InternalServerError,
+												  sql.Message,
+												  lista
+								  );
+			}
+			catch (Exception ex)
+			{
+				log.Error("Erro no código:->" + ex.Message + "\r\nConsulta->" + _stp + "\r\n(\r\n" + Util.RetornaDapperParametrosString(p) + ")" + "\r\n");
+				result = new Retorno<dados_simples>(
+												  HttpStatusCode.InternalServerError,
+												  ex.Message,
+												  lista
+								  );
+			}
+			return result;
+		}
 		private void sendEmail(string user_email, string title, string body)
 		{
 			var dadosSmtp = new DadosSmtp();
