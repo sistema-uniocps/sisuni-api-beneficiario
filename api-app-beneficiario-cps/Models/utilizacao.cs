@@ -12,7 +12,9 @@ namespace api_app_beneficiario_cps.Models
 		public string cpf { get; set; }
 		public string pd_ato { get; set; }
 		public decimal valor { get; set; }
-		public DateTime data_gto { get; set; }
+		public string data_gto { get; set; }
 		public string evento { get; set; }
+		public string cooperado_cpf { get; set; }
+		public string cooperado_nome { get; set; }
 	}
 }

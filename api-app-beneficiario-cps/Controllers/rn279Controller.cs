@@ -23,7 +23,7 @@ namespace api_app_beneficiario_cps.Controllers
 		public Retorno<dropdown> listaPlanosAtivosTitularGet(int id_pessoa)
 		{
 			Retorno<dropdown> retorno;
-			var _stp = "api_app_beneficiario_planos_get";
+			var _stp = "api_app_beneficiario_rn279_pessoa_plano_get";
 			var p = new DynamicParameters();
 			p.Add("id_pessoa", id_pessoa);
 			var lista = new List<dropdown>();
