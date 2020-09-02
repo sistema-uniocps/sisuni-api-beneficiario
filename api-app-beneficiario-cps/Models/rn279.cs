@@ -9,7 +9,7 @@ namespace api_app_beneficiario_cps.Models
 		public string nome { get; set; }
 		public string cpf { get; set; }
 		public string cns { get; set; }
-		public DateTime data_nascimento { get; set; }
+		public string data_nascimento { get; set; }
 		public string email { get; set; }
 		public string telefone { get; set; }
 		public contrato_plano contrato_plano { get; set; }
@@ -28,6 +28,7 @@ namespace api_app_beneficiario_cps.Models
 		public int? id_pessoa_titular { get; set; }
 		public int id_grau_dependencia { get; set; }
 
+		public string cod_carteirinha { get; set; }
 		public string data_validade_inicio { get; set; }
 		public string grau_dependencia { get; set; }
 
