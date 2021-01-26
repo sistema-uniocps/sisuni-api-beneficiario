@@ -1,0 +1,35 @@
+Report: rpt_contrato_PF:  , 26/01/2021 12:35:03
+Método: RetornaBytesReportAnalitic:  , 26/01/2021 12:35:03
+Parâmetros do Report: Parâmetro: id_pessoa_contrato_titular, Valor: 1197729 , 26/01/2021 12:35:03
+Parâmetros do Report: Parâmetro: ID_PESSOA_REPRESENTANTE	, Valor: 0 , 26/01/2021 12:35:03
+Erro: : An attempt was made to set a report parameter 'ID_PESSOA_REPRESENTANTE	' that is not defined in this report. ---> Microsoft.ReportingServices.Diagnostics.Utilities.UnknownReportParameterException: An attempt was made to set a report parameter 'ID_PESSOA_REPRESENTANTE	' that is not defined in this report. , 26/01/2021 12:35:03
+Report: rpt_contrato_PF:  , 26/01/2021 12:36:29
+Método: RetornaBytesReportAnalitic:  , 26/01/2021 12:36:29
+Parâmetros do Report: Parâmetro: id_pessoa_contrato_titular, Valor: 1197729 , 26/01/2021 12:36:29
+Parâmetros do Report: Parâmetro: ID_PESSOA_REPRESENTANTE	, Valor: 0 , 26/01/2021 12:36:29
+Erro: : An attempt was made to set a report parameter 'ID_PESSOA_REPRESENTANTE	' that is not defined in this report. ---> Microsoft.ReportingServices.Diagnostics.Utilities.UnknownReportParameterException: An attempt was made to set a report parameter 'ID_PESSOA_REPRESENTANTE	' that is not defined in this report. , 26/01/2021 12:36:29
+Report: rpt_contrato_PF:  , 26/01/2021 12:36:47
+Método: RetornaBytesReportAnalitic:  , 26/01/2021 12:36:47
+Parâmetros do Report: Parâmetro: id_pessoa_contrato_titular, Valor: 1197729 , 26/01/2021 12:36:47
+Parâmetros do Report: Parâmetro: ID_PESSOA_REPRESENTANTE	, Valor: 0 , 26/01/2021 12:36:47
+Erro: : An attempt was made to set a report parameter 'ID_PESSOA_REPRESENTANTE	' that is not defined in this report. ---> Microsoft.ReportingServices.Diagnostics.Utilities.UnknownReportParameterException: An attempt was made to set a report parameter 'ID_PESSOA_REPRESENTANTE	' that is not defined in this report. , 26/01/2021 12:36:47
+Report: rpt_contrato_PF:  , 26/01/2021 12:38:30
+Método: RetornaBytesReportAnalitic:  , 26/01/2021 12:38:31
+Parâmetros do Report: Parâmetro: id_pessoa_contrato_titular, Valor: 1197729 , 26/01/2021 12:38:35
+Parâmetros do Report: Parâmetro: ID_PESSOA_REPRESENTANTE	, Valor: 0 , 26/01/2021 12:38:37
+Erro: : An attempt was made to set a report parameter 'ID_PESSOA_REPRESENTANTE	' that is not defined in this report. ---> Microsoft.ReportingServices.Diagnostics.Utilities.UnknownReportParameterException: An attempt was made to set a report parameter 'ID_PESSOA_REPRESENTANTE	' that is not defined in this report. , 26/01/2021 12:38:38
+Report: rpt_contrato_PF:  , 26/01/2021 12:40:56
+Método: RetornaBytesReportAnalitic:  , 26/01/2021 12:40:56
+Parâmetros do Report: Parâmetro: id_pessoa_contrato_titular, Valor: 1197729 , 26/01/2021 12:40:56
+Parâmetros do Report: Parâmetro: ID_PESSOA_REPRESENTANTE	, Valor:  , 26/01/2021 12:40:56
+Erro: : An attempt was made to set a report parameter 'ID_PESSOA_REPRESENTANTE	' that is not defined in this report. ---> Microsoft.ReportingServices.Diagnostics.Utilities.UnknownReportParameterException: An attempt was made to set a report parameter 'ID_PESSOA_REPRESENTANTE	' that is not defined in this report. , 26/01/2021 12:40:56
+Report: rpt_contrato_PF:  , 26/01/2021 12:41:43
+Método: RetornaBytesReportAnalitic:  , 26/01/2021 12:41:43
+Parâmetros do Report: Parâmetro: id_pessoa_contrato_titular, Valor: 1197729 , 26/01/2021 12:41:43
+Parâmetros do Report: Parâmetro: ID_PESSOA_REPRESENTANTE	, Valor:  , 26/01/2021 12:41:43
+Erro: : An attempt was made to set a report parameter 'ID_PESSOA_REPRESENTANTE	' that is not defined in this report. ---> Microsoft.ReportingServices.Diagnostics.Utilities.UnknownReportParameterException: An attempt was made to set a report parameter 'ID_PESSOA_REPRESENTANTE	' that is not defined in this report. , 26/01/2021 12:41:43
+Report: rpt_contrato_PF:  , 26/01/2021 12:43:18
+Método: RetornaBytesReportAnalitic:  , 26/01/2021 12:43:19
+Parâmetros do Report: Parâmetro: id_pessoa_contrato_titular, Valor: 1197729 , 26/01/2021 12:43:31
+Parâmetros do Report: Parâmetro: ID_PESSOA_REPRESENTANTE	, Valor:  , 26/01/2021 12:43:31
+Erro: : An attempt was made to set a report parameter 'ID_PESSOA_REPRESENTANTE	' that is not defined in this report. ---> Microsoft.ReportingServices.Diagnostics.Utilities.UnknownReportParameterException: An attempt was made to set a report parameter 'ID_PESSOA_REPRESENTANTE	' that is not defined in this report. , 26/01/2021 12:43:31

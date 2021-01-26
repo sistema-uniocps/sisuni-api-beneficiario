@@ -12,7 +12,7 @@ namespace api_app_beneficiario_cps.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.6.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.8.1.0")]
     public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -52,8 +52,8 @@ namespace api_app_beneficiario_cps.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=pihomol;Initial Catalog=datasys;Integrated Security=False;User ID=sis" +
-            "tema-uniodonto ;password=123@mudar")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=srvuniocps;Initial Catalog=datasys;Integrated Security=False;User ID=" +
+            "usrUniCps;password=S1st3ma@UniCPS")]
         public string cnx_sql {
             get {
                 return ((string)(this["cnx_sql"]));
@@ -62,11 +62,55 @@ namespace api_app_beneficiario_cps.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Provider=Provider=OraOLEDB.Oracle;PORT=1521;Data Source=corporerm;User ID=rm;Pass" +
-            "word=rm; providerName=\"\"")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Provider=MSDAORA;Data Source=corporerm;User ID=rm;Password=rm;")]
         public string cnxOracle {
             get {
                 return ((string)(this["cnxOracle"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://srvuniocps/ReportServer/ReportExecution2005.asmx")]
+        public string urlReportServices {
+            get {
+                return ((string)(this["urlReportServices"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("usrRpt")]
+        public string usrRpt {
+            get {
+                return ((string)(this["usrRpt"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("S1st3ma@UniCPS")]
+        public string senhaRpt {
+            get {
+                return ((string)(this["senhaRpt"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("SRVUNIOCPS")]
+        public string dominioRpt {
+            get {
+                return ((string)(this["dominioRpt"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("/datasys-cps/")]
+        public string folderRpt {
+            get {
+                return ((string)(this["folderRpt"]));
             }
         }
     }

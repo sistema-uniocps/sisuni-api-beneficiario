@@ -4,6 +4,7 @@ using Dapper;
 using log4net;
 using LogUtil;
 using Microsoft.Owin.Security.OAuth;
+using rptToPdf.objReporting;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -11,6 +12,7 @@ using System.Linq;
 using System.Net;
 using System.Security.Claims;
 using System.Web.Http;
+using System.Web.Http.Description;
 
 namespace api_app_beneficiario_cps.Controllers
 {
@@ -216,6 +218,168 @@ namespace api_app_beneficiario_cps.Controllers
 			return retorno;
 		}
 
+		#region [Relatórios/Contrato - Atende Fim contrato YPE]
+		/*
+		 * Método implementado para atender a uma demanda da YPÊ com fim de contrato
+		 * 26/01/2020
+		 * 
+		 */ 
+		[ResponseType(typeof(Retorno<reportOut>))]
+		[HttpGet]
+		public Retorno<reportOut> contratopf_get(int id_pessoa, string primeiro_nome)
+		{
+			Retorno<reportOut> retorno;
+			reportOut obj = new reportOut();
+			//--------------------------------------- Nome do RPT/Contato
+
+			//--------------------------------------- DEFINE O TIPO
+			rptToPdf.objReporting.RptToPdf.tipoSaidaReport tipoRpt = new RptToPdf.tipoSaidaReport();
+			tipoRpt = RptToPdf.tipoSaidaReport.PDF;
+
+			//--------------------------------------- OBTEM OS PARÂMETROS
+			System.Collections.Hashtable parametros = new System.Collections.Hashtable();
+			parametros.Add("id_pessoa_contrato_titular"/*Nome*/, id_pessoa/*valor*/);
+			parametros.Add("ID_PESSOA_REPRESENTANTE"/*Nome*/, "0" /*valor*/);
+
+			//--------------------------------------- GERA O RELATÓRIO
+			try
+			{
+				byte[] arqBinario = mRetornaBytesPdf_Report(
+																5/*id_cooperativa*/,
+																"rpt_contrato_PF",
+																parametros,
+																tipoRpt
+														   );
+				obj.documento_x64 = Convert.ToBase64String(arqBinario.ToArray());
+				obj.documento_nome = "contrato-pf-" + primeiro_nome + ".pdf";
+
+				if (!string.IsNullOrWhiteSpace(obj.documento_x64))
+				{
+					retorno = new Retorno<reportOut>(
+														HttpStatusCode.OK,
+														string.Empty,
+														obj
+													);
+				}
+				else
+				{
+					retorno = new Retorno<reportOut>(
+														HttpStatusCode.NotFound,
+														"A execução do relatório não retornou registos.",
+														obj
+													);
+
+				}
+			}
+			catch (Exception ex)
+			{
+				log.Error("Erro c#:->" + ex.Message);
+				retorno = new Retorno<reportOut>(
+												  HttpStatusCode.InternalServerError,
+												  ex.Message,
+												  obj
+								  );
+			}
+			return retorno;
+		}
+
+
+		private byte[] mRetornaBytesPdf_Report(
+													   int id_cooperativa,
+													   string nomeRpt,
+													   System.Collections.Hashtable paramRpt,
+													   rptToPdf.objReporting.RptToPdf.tipoSaidaReport tipo
+												   )
+		{
+			/*
+             *    
+                    Hashtable paramRpt = new Hashtable();
+                    string nomeRpt = "rpt_sis_carta_notificacao_reajuste_pj";
+                    //---------------------------------------------------------- Obtem o binário do report
+                    paramRpt.Add("id_simulador_header", id_simulador_header);
+                    paramRpt.Add("id_simulador_item", id_simulador_item);
+             */
+			string DirLog = System.Web.Hosting.HostingEnvironment.MapPath("~") + "\\" + "logRpt";
+
+			byte[] arrayBytesRetornados = null;
+			RptToPdf objRpt = new RptToPdf();
+
+			string urlServicoRpt = api_app_beneficiario_cps.Properties.Settings.Default.urlReportServices;
+			string ReportFolder = api_app_beneficiario_cps.Properties.Settings.Default.folderRpt;
+
+			System.Net.NetworkCredential cred = new System.Net.NetworkCredential();
+			cred.UserName = api_app_beneficiario_cps.Properties.Settings.Default.usrRpt;
+			cred.Password = api_app_beneficiario_cps.Properties.Settings.Default.senhaRpt;
+			cred.Domain = api_app_beneficiario_cps.Properties.Settings.Default.dominioRpt; 
+
+			arrayBytesRetornados = objRpt.RetornaBytesReportAnalitico(cred, urlServicoRpt, ReportFolder, nomeRpt, paramRpt, DirLog, tipo);
+
+			return (arrayBytesRetornados);
+		}
+
+		[HttpPost, HttpPut]
+		[ResponseType(typeof(Retorno<dados_simples>))]
+		public Retorno<dados_simples> contratopf_set(arquivoIn contratoPf)
+		{
+			Retorno<dados_simples> retorno;
+			DynamicParameters p = new DynamicParameters();
+			dados_simples obj = new dados_simples();
+			string _stp = "datasys_pessoa_documento_set";
+
+			try
+			{
+				p.Add("id_pessoa", contratoPf.id_pessoa );
+				p.Add("id_tipo_documento", contratoPf.id_tipo_documento);
+				p.Add("documento_nome", contratoPf.documento_nome);
+				p.Add("documento_extensao", contratoPf.documento_extensao);
+				p.Add("binario", Convert.FromBase64String(contratoPf.documento_x64) );
+
+				using (var sqlcon = new SqlConnection(api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql))
+				{
+					obj = sqlcon.Query<dados_simples>(_stp, p, commandType: System.Data.CommandType.StoredProcedure).FirstOrDefault();
+				}
+
+				retorno = new Retorno<dados_simples>(
+													obj.result == 1 ? HttpStatusCode.OK : HttpStatusCode.NotFound,
+													obj.result == 1 ? string.Empty : "Erro inesperado no processo de registro, tente novamente em 10 minutos.",
+													obj
+												);
+				//Pessoa/Beneficiário não foi identificado
+				if (obj.result == 0)
+				{
+					retorno = new Retorno<dados_simples>(
+													  HttpStatusCode.InternalServerError,
+													  "Erro no processo de validação do E-mail ",
+													  obj
+									  );
+				}
+			}
+			catch (SqlException sql)
+			{
+
+				log.Error("Erro no banco:->" + sql.Message + "\r\nConsulta->" + _stp + "\r\n(\r\n" + Util.RetornaDapperParametrosString(p) + ")" + "\r\n");
+
+				retorno = new Retorno<dados_simples>(
+												  HttpStatusCode.InternalServerError,
+												  sql.Message,
+												  obj
+								  );
+			}
+			catch (Exception ex)
+			{
+				log.Error("Erro no código:->" + ex.Message + "\r\nConsulta->" + _stp + "\r\n(\r\n" + Util.RetornaDapperParametrosString(p) + ")" + "\r\n");
+
+				retorno = new Retorno<dados_simples>(
+												  HttpStatusCode.InternalServerError,
+												  ex.Message,
+												  obj
+								  );
+			}
+			return retorno;
+		}
+
+
+		#endregion
 
 
 	}
