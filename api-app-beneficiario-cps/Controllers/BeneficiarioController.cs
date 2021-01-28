@@ -226,7 +226,7 @@ namespace api_app_beneficiario_cps.Controllers
 		 */ 
 		[ResponseType(typeof(Retorno<reportOut>))]
 		[HttpGet]
-		public Retorno<reportOut> contratopf_get(int id_pessoa, string primeiro_nome)
+		public Retorno<reportOut> contratopf_get(int id_pessoa, string primeiro_nome, int isExcluirDependente)
 		{
 			Retorno<reportOut> retorno;
 			reportOut obj = new reportOut();
@@ -238,15 +238,15 @@ namespace api_app_beneficiario_cps.Controllers
 
 			//--------------------------------------- OBTEM OS PARÂMETROS
 			System.Collections.Hashtable parametros = new System.Collections.Hashtable();
-			parametros.Add("id_pessoa_contrato_titular"/*Nome*/, id_pessoa/*valor*/);
-			parametros.Add("ID_PESSOA_REPRESENTANTE"/*Nome*/, "0" /*valor*/);
+			parametros.Add("id_pessoa"/*Nome*/, id_pessoa/*valor*/);
+			parametros.Add("isexcluirdependente"/*Nome*/, isExcluirDependente /*valor*/);
 
 			//--------------------------------------- GERA O RELATÓRIO
 			try
 			{
 				byte[] arqBinario = mRetornaBytesPdf_Report(
 																5/*id_cooperativa*/,
-																"rpt_contrato_PF",
+																"rpt_contrato_YPE",
 																parametros,
 																tipoRpt
 														   );
