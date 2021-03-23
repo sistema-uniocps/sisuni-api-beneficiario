@@ -226,7 +226,7 @@ namespace api_app_beneficiario_cps.Controllers
 		 */ 
 		[ResponseType(typeof(Retorno<reportOut>))]
 		[HttpGet]
-		public Retorno<reportOut> contratopf_get(int id_pessoa, string primeiro_nome, int isExcluirDependente)
+		public Retorno<reportOut> contratopf_get(string primeiro_nome, int id_pessoa, int isExcluirDependente)
 		{
 			Retorno<reportOut> retorno;
 			reportOut obj = new reportOut();
@@ -282,6 +282,75 @@ namespace api_app_beneficiario_cps.Controllers
 			}
 			return retorno;
 		}
+
+		[ResponseType(typeof(Retorno<reportOut>))]
+		[HttpGet]
+		public Retorno<reportOut> contratopf_padrao_get(
+														string primeiro_nome,
+														int id_pessoa,
+														int nro_contrato_origem, 
+														int nro_contrato_destino, 
+														int isExcluirDependente
+			)
+		{
+			Retorno<reportOut> retorno;
+			reportOut obj = new reportOut();
+			//--------------------------------------- Nome do RPT/Contato
+
+			//--------------------------------------- DEFINE O TIPO
+			rptToPdf.objReporting.RptToPdf.tipoSaidaReport tipoRpt = new RptToPdf.tipoSaidaReport();
+			tipoRpt = RptToPdf.tipoSaidaReport.PDF;
+
+			//--------------------------------------- OBTEM OS PARÂMETROS
+			System.Collections.Hashtable parametros = new System.Collections.Hashtable();
+			parametros.Add("id_pessoa", id_pessoa);
+			parametros.Add("nro_contrato_origem", nro_contrato_origem);
+			parametros.Add("nro_contrato_destino", nro_contrato_destino);
+			parametros.Add("isexcluirdependente", isExcluirDependente) ;
+
+			//--------------------------------------- GERA O RELATÓRIO
+			try
+			{
+				byte[] arqBinario = mRetornaBytesPdf_Report(
+																5/*id_cooperativa*/,
+																"rpt_contrato_pj_to_pf",
+																parametros,
+																tipoRpt
+														   );
+				obj.documento_x64 = Convert.ToBase64String(arqBinario.ToArray());
+				obj.documento_nome = "contrato-pf-" + primeiro_nome + ".pdf";
+
+				if (!string.IsNullOrWhiteSpace(obj.documento_x64))
+				{
+					retorno = new Retorno<reportOut>(
+														HttpStatusCode.OK,
+														string.Empty,
+														obj
+													);
+				}
+				else
+				{
+					retorno = new Retorno<reportOut>(
+														HttpStatusCode.NotFound,
+														"A execução do relatório não retornou registos.",
+														obj
+													);
+
+				}
+			}
+			catch (Exception ex)
+			{
+				log.Error("Erro c#:->" + ex.Message);
+				retorno = new Retorno<reportOut>(
+												  HttpStatusCode.InternalServerError,
+												  ex.Message,
+												  obj
+								  );
+			}
+			return retorno;
+		}
+
+
 
 
 		private byte[] mRetornaBytesPdf_Report(
