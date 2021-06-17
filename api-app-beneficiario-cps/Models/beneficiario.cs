@@ -9,6 +9,7 @@ namespace api_app_beneficiario_cps.Models
     {
         public int id_pessoa { get; set; }
         public string nome { get; set; }
+        public string nome_social { get; set; }
         public string cpf { get; set; }
         public string cns { get; set; }
         public DateTime data_nascimento { get; set; }
@@ -31,7 +32,7 @@ namespace api_app_beneficiario_cps.Models
     public class carteirinha
     {
         public string beneficiario { get; set; }
-        public string data_nascimento { get; set; }
+        public string nome_social { get; set; }
         public string cartao_nacional_saude { get; set; }
         public string empresa { get; set; }
         public string plano { get; set; }
