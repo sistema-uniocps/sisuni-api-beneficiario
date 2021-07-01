@@ -218,12 +218,57 @@ namespace api_app_beneficiario_cps.Controllers
 			return retorno;
 		}
 
+
+		[HttpGet]
+		public Retorno<dadosCarteirinha> dadosCartao(int id_pessoa)
+		{
+			Retorno<dadosCarteirinha> retorno;
+			var _stp = "api_app_beneficiario_dados_carteirinha_get";
+			var p = new DynamicParameters();
+			var lista = new List<dadosCarteirinha>();
+
+			try
+			{
+				p.Add("id_pessoa", id_pessoa);
+				using (var sqlcon = new SqlConnection(api_app_beneficiario_cps.Properties.Settings.Default.cnx_sql))
+				{
+					lista = sqlcon.Query<dadosCarteirinha>(_stp, p, commandType: System.Data.CommandType.StoredProcedure).ToList();
+				}
+
+				retorno = new Retorno<dadosCarteirinha>(
+													lista.Count > 0 ? HttpStatusCode.OK : HttpStatusCode.NotFound,
+													lista.Count > 0 ? string.Empty : Mensagem.NenhumItem,
+													lista
+												);
+			}
+			catch (SqlException sql)
+			{
+
+				log.Error("Erro no banco:->" + sql.Message + "\r\nConsulta->" + _stp + "\r\n(\r\n" + Util.RetornaDapperParametrosString(p) + ")" + "\r\n");
+								retorno = new Retorno<dadosCarteirinha>(
+												  HttpStatusCode.InternalServerError,
+												  sql.Message,
+												  lista
+								  );
+			}
+			catch (Exception ex)
+			{
+				log.Error("Erro no código:->" + ex.Message + "\r\nConsulta->" + _stp + "\r\n(\r\n" + Util.RetornaDapperParametrosString(p) + ")" + "\r\n");
+				retorno = new Retorno<dadosCarteirinha>(
+												  HttpStatusCode.InternalServerError,
+												  ex.Message,
+												  lista
+								  );
+			}
+			return retorno;
+		}
+
 		#region [Relatórios/Contrato - Atende Fim contrato YPE]
 		/*
 		 * Método implementado para atender a uma demanda da YPÊ com fim de contrato
 		 * 26/01/2020
 		 * 
-		 */ 
+		 */
 		[ResponseType(typeof(Retorno<reportOut>))]
 		[HttpGet]
 		public Retorno<reportOut> contratopf_get(string primeiro_nome, int id_pessoa, int isExcluirDependente)
